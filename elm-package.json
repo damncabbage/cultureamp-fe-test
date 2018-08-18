@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "Culture Amp Frontend Test for Rob Howard",
-    "repository": "https://github.com/damncabbage/not-hosted-on-github",
+    "repository": "https://github.com/damncabbage/cultureamp-fe-test",
     "license": "BSD3",
     "source-directories": [
         "src"
