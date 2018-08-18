@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "Rob Howard <rob@robhoward.id.au>",
-  "repository": "https://github.com/damncabbage/not-hosted-on-github",
+  "repository": "https://github.com/damncabbage/cultureamp-fe-test",
   "license": "Apache-2.0",
   "devDependencies": {
     "css-loader": "^1.0.0",
