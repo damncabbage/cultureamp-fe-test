@@ -1,0 +1,28 @@
+{
+  "name": "camper-survey-app",
+  "version": "1.0.0",
+  "description": "Culture Amp Frontend Test for Rob Howard",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --mode development --watch",
+    "start": "webpack-dev-server --mode development --port $WEBPACK_PORT",
+    "errors": "webpack --mode development --display-error-details"
+  },
+  "keywords": [],
+  "author": "Rob Howard <rob@robhoward.id.au>",
+  "repository": "https://github.com/damncabbage/not-hosted-on-github",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "elm-css-modules-loader": "^2.1.5",
+    "elm-webpack-loader": "^4.5.0",
+    "file-loader": "^1.1.11",
+    "loader-utils": "^1.1.0",
+    "mini-css-extract-plugin": "^0.4.1",
+    "style-loader": "^0.22.1",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  }
+}

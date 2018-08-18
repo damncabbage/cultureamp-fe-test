@@ -1,0 +1,9 @@
+# Webpack output
+/dist
+
+# Environment config (.env.default is the committed version of this)
+/.env
+
+# Package installs
+/elm-stuff
+/node_modules
