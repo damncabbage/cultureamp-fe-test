@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack --mode development --watch",
+    "test": "echo TODO && false",
     "start": "webpack-dev-server --mode development --port $WEBPACK_PORT",
     "errors": "webpack --mode development --display-error-details"
   },

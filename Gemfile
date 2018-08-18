@@ -9,3 +9,12 @@ gem 'rack-proxy', '~> 0.6.4'
 group :development do
   gem 'foreman', '~> 0.85.0'
 end
+
+group :test do
+  gem 'rspec'
+  gem 'rack-test'
+end
+
+group :development, :test do
+  gem 'rake'
+end

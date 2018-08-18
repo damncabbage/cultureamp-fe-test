@@ -18,10 +18,17 @@ npm install
 bundle install
 ```
 
-And then either start development with:
+And then start the development server with:
 
 ```
 bundle exec foreman start
+```
+
+... or run the test suites with:
+
+```
+npm run test
+bundle exec rake
 ```
 
 ... or build and start production with:
