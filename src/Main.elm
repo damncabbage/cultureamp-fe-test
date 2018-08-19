@@ -3,6 +3,8 @@ module Main exposing (..)
 import Html exposing (div, text)
 import Styles exposing (class)
 
+import Survey
+
 type alias Flags =
     { apiBaseUrl : String
     }
