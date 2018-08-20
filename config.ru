@@ -21,15 +21,20 @@ when 'development'
     end
   end
 
-  run Rack::URLMap.new({
-    "/" => WebpackProxy.new,
-  })
+  # Proxy everything back to Webpack, to serve both generated-on-the-fly
+  # assets, and to route everything to the index.html so we can have
+  # path-based routing for our Elm app.
+  run WebpackProxy.new
 
 when 'production'
+  # Go looking for assets specifically first.
   use Rack::Static, {
     urls: ['/assets'],
     root: 'dist'
   }
+
+  # Route everything to the index.html, so we can have
+  # path-based routing for our Elm app.
   run -> (env) do
     env[Rack::PATH_INFO] = '/index.html'
     Rack::File.new('dist').call(env)

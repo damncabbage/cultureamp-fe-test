@@ -5,10 +5,12 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "webpack --mode production",
+    "clean": "echo 'Cleaning up dist/; ^C to get out' && read && rm -rf dist/",
     "watch": "webpack --mode development --watch",
     "test": "echo TODO && false",
-    "start": "webpack-dev-server --mode development --port $WEBPACK_PORT",
-    "errors": "webpack --mode development --display-error-details"
+    "start": "webpack-dev-server --mode development --port $WEBPACK_PORT --history-api-fallback",
+    "errors": "webpack --mode development --display-error-details",
+    "format": "elm-format src/"
   },
   "keywords": [],
   "author": "Rob Howard <rob@robhoward.id.au>",
@@ -17,6 +19,7 @@
   "devDependencies": {
     "css-loader": "^1.0.0",
     "elm-css-modules-loader": "^2.1.5",
+    "elm-format": "^0.6.1-alpha",
     "elm-webpack-loader": "^4.5.0",
     "file-loader": "^1.1.11",
     "loader-utils": "^1.1.0",
