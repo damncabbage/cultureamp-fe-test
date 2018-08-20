@@ -1,6 +1,10 @@
 module Url exposing (..)
 
-type Url = Url String
+
+type Url
+    = Url String
+
 
 toString : Url -> String
-toString (Url s) = s
+toString (Url s) =
+    s
