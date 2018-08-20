@@ -1,32 +1,70 @@
 module Main exposing (..)
 
-import Html exposing (div, text)
+import Html exposing (Html, div, text)
+import Navigation exposing (Location, newUrl)
+import Dict exposing (Dict)
+import RemoteData exposing (WebData)
+
+
+-- Internal imports
+
+import Data.Root exposing (Flags, Model, Msg(..))
+import Data.Routing as Routing exposing (Route(..), routeToPath)
+import Page.Index
+import Page.Survey
+import Page.NotFound
 import Styles exposing (class)
 
-import Survey
 
-type alias Flags =
-    { apiBaseUrl : String
-    }
-
-type alias Model =
-    {}
-
-init : Flags -> (Model, Cmd msg)
-init flags =
-    ({}, Cmd.none)
-
-view : Model -> Html.Html a
+view : ProgramModel -> Html Msg
 view model =
-    div
-        [ class .papayawhip ]
-        [ text "Loading..." ]
+    let
+        subview = case model.route of
+            IndexRoute ->
+                Page.Index.view model
+            SurveyRoute id ->
+                Page.Survey.view model
+            NotFoundRoute ->
+                Page.NotFound.view
+    in
+        div
+            [ class .papayawhip ]
+            [ text (toString model.route)
+            , subview
+            ]
 
-main : Program Flags Model a
+type alias ProgramModel =
+    Model (Page.Index.Model (Page.Survey.Model {}))
+
+init : Flags -> Location -> ( ProgramModel, Cmd Msg )
+init flags location =
+    ( { route = Routing.parseLocation location
+      , config = flags
+      , surveyIndex = RemoteData.NotAsked
+      , surveys = Dict.empty
+      , todo = ()
+      , surveyId = Nothing
+      }
+    , Cmd.none
+    )
+
+update : Msg -> ProgramModel -> (ProgramModel, Cmd Msg)
+update msg model =
+    case msg of
+        LocationHasChanged location ->
+            ( { model | route = Routing.parseLocation location }
+            , Cmd.none
+            )
+        ChangeLocation route ->
+            ( model
+            , newUrl (Routing.routeToPath route)
+            )
+
+main : Program Flags ProgramModel Msg
 main =
-    Html.programWithFlags
+    Navigation.programWithFlags LocationHasChanged
         { init = init
-        , update = \msg model -> (model, Cmd.none)
+        , update = update
         , subscriptions = \model -> Sub.none
         , view = view
         }
