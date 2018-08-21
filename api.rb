@@ -17,4 +17,12 @@ class SurveyAPI < Sinatra::Base
 			File.join(settings.data_folder, 'survey_results')
 		)
   end
+
+  def error_json(msg)
+    { error: msg }.to_json
+  end
+
+  error(400) { error_json('Bad input') }
+  error(404) { error_json('Not found') }
+  error(500) { error_json('Server error') }
 end

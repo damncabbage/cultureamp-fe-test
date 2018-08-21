@@ -2,7 +2,7 @@ require File.expand_path '../spec_helper.rb', __FILE__
 
 describe "Survey API app" do
   specify "index" do
-    get '/', 'CONTENT_TYPE' => 'application/json'
+    get '/'
 
     expect(last_response).to be_ok
     expect(
@@ -16,7 +16,7 @@ describe "Survey API app" do
 	].each do |(id, name)|
 		["", ".json"].each do |ext|
 			specify "survey #{id}#{ext} (#{name})" do
-				get "/survey_results/#{id}#{ext}", 'CONTENT_TYPE' => 'application/json'
+				get "/survey_results/#{id}#{ext}"
 
 				expect(last_response).to be_ok
 				expect(
@@ -27,7 +27,7 @@ describe "Survey API app" do
 	end
 
   specify "non-existent survey" do
-    get '/survey_results/3.json', 'CONTENT_TYPE' => 'application/json'
+    get '/survey_results/3'
 
     expect(last_response).to be_not_found
   end
