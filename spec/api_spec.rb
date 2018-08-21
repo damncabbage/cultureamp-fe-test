@@ -6,25 +6,25 @@ describe "Survey API app" do
 
     expect(last_response).to be_ok
     expect(
-			JSON.parse(last_response.body)['survey_results'][0]['name']
-		).to_not be_nil
+      JSON.parse(last_response.body)['survey_results'][0]['name']
+    ).to_not be_nil
   end
 
-	[
-		["1", "Simple Survey"],
-		["2", "Acme Engagement Survey"],
-	].each do |(id, name)|
-		["", ".json"].each do |ext|
-			specify "survey #{id}#{ext} (#{name})" do
-				get "/survey_results/#{id}#{ext}"
+  [
+    ["1", "Simple Survey"],
+    ["2", "Acme Engagement Survey"],
+  ].each do |(id, name)|
+    ["", ".json"].each do |ext|
+      specify "survey #{id}#{ext} (#{name})" do
+        get "/survey_results/#{id}#{ext}"
 
-				expect(last_response).to be_ok
-				expect(
-					JSON.parse(last_response.body)['survey_result_detail']['name']
-				).to eq(name)
-			end
-		end
-	end
+        expect(last_response).to be_ok
+        expect(
+          JSON.parse(last_response.body)['survey_result_detail']['name']
+        ).to eq(name)
+      end
+    end
+  end
 
   specify "non-existent survey" do
     get '/survey_results/3'
