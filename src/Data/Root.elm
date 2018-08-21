@@ -15,7 +15,7 @@ type alias Flags =
 
 type alias Model rest =
     { rest
-    | route : Routing.Route
+    | route : Maybe Routing.Route
     , config : Flags
     , surveyIndex : WebData (List Survey.Summary)
     , surveys : Dict Survey.SurveyId (WebData (Nonempty Survey.Theme))

@@ -12,13 +12,11 @@ import Data.Survey exposing (SurveyId(..))
 type Route
     = IndexRoute
     | SurveyRoute SurveyId
-    | NotFoundRoute
 
 
-parseLocation : Location -> Route
+parseLocation : Location -> Maybe Route
 parseLocation location =
     parsePath routeParser location
-    |> Maybe.withDefault NotFoundRoute
 
 
 routeParser : Parser (Route -> a) a
@@ -35,8 +33,6 @@ routeToPath route =
             indexPath
         SurveyRoute id ->
             surveyPath id
-        NotFoundRoute ->
-            "/this/is/why/route/should/be/a/maybe" -- TODO
 
 
 indexPath : String
