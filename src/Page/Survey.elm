@@ -7,17 +7,12 @@ import Data.Root
 
 type alias Model rest =
     { rest
-    | surveyId : Maybe SurveyId
+    | todo : ()
     }
 
 
-view : Data.Root.Model (Model r) -> Html a
-view model =
+view : SurveyId -> Data.Root.Model (Model r) -> Html a
+view id model =
     div [] [
-        text ("ID: " ++ (
-            (Maybe.withDefault "X" 
-                (Maybe.map surveyIdToString model.surveyId)
-            )
-        )
-    )
+        text ("ID: " ++ (surveyIdToString id))
     ]

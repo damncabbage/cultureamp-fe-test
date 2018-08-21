@@ -20,11 +20,11 @@ view : ProgramModel -> Html Msg
 view model =
     let
         subview = case model.route of
-            IndexRoute ->
+            Just IndexRoute ->
                 Page.Index.view model
-            SurveyRoute id ->
-                Page.Survey.view model
-            NotFoundRoute ->
+            Just (SurveyRoute id) ->
+                Page.Survey.view id model
+            Nothing ->
                 Page.NotFound.view
     in
         div
@@ -43,7 +43,6 @@ init flags location =
       , surveyIndex = RemoteData.NotAsked
       , surveys = Dict.empty
       , todo = ()
-      , surveyId = Nothing
       }
     , Cmd.none
     )
