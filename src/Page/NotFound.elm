@@ -2,10 +2,11 @@ module Page.NotFound exposing (..)
 
 import Html exposing (Html, div, text)
 import Html.Events exposing (onClick)
-import Data.Root exposing (Msg(..))
+import Data.Msg exposing (RootMsg(..))
 import Data.Routing exposing (Route(..))
 
-view : Html Msg
+
+view : Html RootMsg
 view =
     div
         [ onClick (ChangeLocation IndexRoute) ]

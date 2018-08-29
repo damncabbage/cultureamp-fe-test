@@ -2,64 +2,120 @@ module Main exposing (..)
 
 import Html exposing (Html, div, text)
 import Navigation exposing (Location, newUrl)
-import Dict exposing (Dict)
-import RemoteData exposing (WebData)
 
 
 -- Internal imports
 
-import Data.Root exposing (Flags, Model, Msg(..))
+import Data.Msg exposing (RootMsg(..))
 import Data.Routing as Routing exposing (Route(..), routeToPath)
+import Data.Url exposing (Url(..))
+import Helpers exposing (updateWith)
 import Page.Index
+import Page.Index.Types
 import Page.Survey
+import Page.Survey.Types
 import Page.NotFound
 import Styles exposing (class)
 
 
-view : ProgramModel -> Html Msg
-view model =
+type alias Flags =
+    { apiBaseUrl : String
+    }
+
+
+type alias Model =
+    { route : Maybe Routing.Route
+    , apiBaseUrl : Url
+    , pageIndex : Page.Index.Types.Model
+    , pageSurvey : Page.Survey.Types.Model
+    }
+
+
+view : Model -> Html RootMsg
+view { route, pageIndex, pageSurvey } =
     let
-        subview = case model.route of
-            Just IndexRoute ->
-                Page.Index.view model
-            Just (SurveyRoute id) ->
-                Page.Survey.view id model
-            Nothing ->
-                Page.NotFound.view
+        subview =
+            case route of
+                Just IndexRoute ->
+                    Page.Index.view IndexMsg pageIndex
+
+                Just (SurveyRoute id) ->
+                    Page.Survey.view id SurveyMsg pageSurvey
+
+                Nothing ->
+                    Page.NotFound.view
     in
         div
             [ class .papayawhip ]
-            [ text (toString model.route)
+            [ text (toString route)
             , subview
             ]
 
-type alias ProgramModel =
-    Model (Page.Index.Model (Page.Survey.Model {}))
 
-init : Flags -> Location -> ( ProgramModel, Cmd Msg )
+init : Flags -> Location -> ( Model, Cmd RootMsg )
 init flags location =
-    ( { route = Routing.parseLocation location
-      , config = flags
-      , surveyIndex = RemoteData.NotAsked
-      , surveys = Dict.empty
-      , todo = ()
-      }
-    , Cmd.none
-    )
+    { route = Nothing
+    , apiBaseUrl = Url flags.apiBaseUrl
+    , pageIndex = Page.Index.initModel
+    , pageSurvey = Page.Survey.initModel
+    }
+        |> setRoute (Routing.parseLocation location)
 
-update : Msg -> ProgramModel -> (ProgramModel, Cmd Msg)
+
+update : RootMsg -> Model -> ( Model, Cmd RootMsg )
 update msg model =
     case msg of
+        DoNothing ->
+            ( model, Cmd.none )
+
         LocationHasChanged location ->
-            ( { model | route = Routing.parseLocation location }
-            , Cmd.none
-            )
+            setRoute (Routing.parseLocation location) model
+
         ChangeLocation route ->
             ( model
             , newUrl (Routing.routeToPath route)
             )
 
-main : Program Flags ProgramModel Msg
+        IndexMsg subMsg ->
+            Page.Index.update model.apiBaseUrl subMsg IndexMsg
+                |> updateWith
+                    (\si -> { model | pageIndex = si })
+                    identity
+
+        SurveyMsg subMsg ->
+            Page.Survey.update model.apiBaseUrl subMsg SurveyMsg model.pageSurvey
+                |> updateWith
+                    (\sm -> { model | pageSurvey = sm })
+                    identity
+
+
+setRoute : Maybe Route -> Model -> ( Model, Cmd RootMsg )
+setRoute maybeRoute model =
+    let
+        newModel =
+            { model | route = maybeRoute }
+    in
+        case maybeRoute of
+            Just (SurveyRoute id) ->
+                updateWith
+                    (\ps -> { newModel | pageSurvey = ps })
+                    SurveyMsg
+                    (Page.Survey.initLoad model.pageSurvey model.apiBaseUrl id)
+
+            Just IndexRoute ->
+                updateWith
+                    (\ps -> { newModel | pageIndex = ps })
+                    IndexMsg
+                    (Page.Index.initLoad model.apiBaseUrl)
+
+            -- TODO: Just, Nothing
+            _ ->
+                ( newModel
+                , Cmd.none
+                )
+
+
+main : Program Flags Model RootMsg
 main =
     Navigation.programWithFlags LocationHasChanged
         { init = init

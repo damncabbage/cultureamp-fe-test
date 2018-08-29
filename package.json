@@ -8,7 +8,7 @@
     "clean": "echo 'Cleaning up dist/; ^C to get out' && read && rm -rf dist/",
     "watch": "webpack --mode development --watch",
     "test": "echo TODO && false",
-    "start": "webpack-dev-server --mode development --port $WEBPACK_PORT --history-api-fallback",
+    "start": "set -u && webpack-dev-server --mode development --port $WEBPACK_PORT --history-api-fallback",
     "errors": "webpack --mode development --display-error-details",
     "format": "elm-format src/"
   },
@@ -17,6 +17,7 @@
   "repository": "https://github.com/damncabbage/cultureamp-fe-test",
   "license": "Apache-2.0",
   "devDependencies": {
+    "clean-terminal-webpack-plugin": "^1.1.0",
     "css-loader": "^1.0.0",
     "elm-css-modules-loader": "^2.1.5",
     "elm-format": "^0.6.1-alpha",
