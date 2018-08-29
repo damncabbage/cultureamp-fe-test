@@ -2,6 +2,7 @@ const path = require('path');
 
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CleanTerminalPlugin = require('clean-terminal-webpack-plugin');
 
 module.exports = (env, argv) => {
   let isProduction;
@@ -80,6 +81,17 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         filename: "assets/[name].css"
       }),
+
+      // Clear the screen before each compile.
+      new CleanTerminalPlugin(
+        process.env['BACKEND_PORT'] && process.env['WEBPACK_PORT'] && {
+          message: [
+            "",
+            `Backend server running on http://localhost:${process.env['BACKEND_PORT']}/`,
+            `Webpack server running on http://localhost:${process.env['WEBPACK_PORT']}/`,
+          ].join("\n")
+        }
+      )
     ],
 
     devServer: {

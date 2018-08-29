@@ -26,11 +26,13 @@ routeParser =
         , map (SurveyRoute << SurveyId) (s "survey" </> int)
         ]
 
+
 routeToPath : Route -> String
 routeToPath route =
     case route of
         IndexRoute ->
             indexPath
+
         SurveyRoute id ->
             surveyPath id
 

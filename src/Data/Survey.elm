@@ -1,29 +1,35 @@
 module Data.Survey exposing (..)
 
-import Url exposing (Url)
-import Positive exposing (Positive)
 import List.Nonempty exposing (Nonempty)
+import Data.Url exposing (Url)
 
 
 type alias Summary =
     { name : String
     , url : Url
     , participant :
-        { totalCount : Positive Int
-        , responseCount : Positive Int
-        , responseRate : Positive Float
+        { totalCount : Int
+        , responseCount : Int
+        , responseRate : Float
         }
     }
 
 
-type alias Theme =
+type alias Survey question =
+    { summary : Summary
+    , themes : Nonempty (Theme question)
+    }
+
+
+type alias Theme question =
     { name : String
-    , question : Nonempty Question
+    , questions : Nonempty question
     }
 
 
 type SurveyId
     = SurveyId Int
+
 
 surveyIdToString : SurveyId -> String
 surveyIdToString (SurveyId id) =
@@ -35,9 +41,7 @@ type Rating
 
 
 type alias Response a =
-    { id : Int
-    , questionId : Int
-    , respondentId : Int
+    { respondentId : Int
     , response : Maybe a
     }
 
@@ -46,8 +50,9 @@ type QuestionType
     = RatingQuestion
 
 
-type alias Question =
-    { description : String
-    , questionType : QuestionType
-    , ratingResponses : List (Response Rating)
+type alias Question a =
+    { a
+        | description : String
+        , questionType : QuestionType
+        , responses : List (Response Rating)
     }
