@@ -65,8 +65,8 @@ bundle exec rake
   * `Api.Json` is kind of a mess, but there's enough crossover between both Survey types and generic decoders that it's fine... ish... for the moment.
 
 * Tests
-  * The tests are of the "round-trip a data structure through encoder+decoder functions" variety, eg. the routing tests.
-  * The decoder tests are of the "does it not crash" variety, instead of generating data of different shapes.
+  * The tests are of the "round-trip a data structure through encoder+decoder functions" variety, eg. the routing and JSON tests; admittedly these round-trip fuzzers *are* useful in flushing out silly mistakes, though.
+  * The JSON decoder tests are incomplete; they only test the "index" JSON, as an example of what round-trip fuzzers look like.
   * There are no UI functionality tests, which can go pear-shaped even if your types line up; I had a "compiling but not working" UI when hooking up the API-loading functions the first time around.
 
 * Documentation

@@ -4,14 +4,16 @@ import List.Nonempty exposing (Nonempty)
 import Data.Url exposing (Url)
 
 
+type alias Index =
+    List Summary
+
+
 type alias Summary =
     { name : String
     , url : Url
-    , participant :
-        { totalCount : Int
-        , responseCount : Int
-        , responseRate : Float
-        }
+    , participantTotalCount : Int
+    , participantResponseCount : Int
+    , participantResponseRate : Float
     }
 
 

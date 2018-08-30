@@ -4,6 +4,7 @@ import Navigation exposing (Location)
 import Expect exposing (Expectation)
 import Test exposing (..)
 import Fuzz exposing (..)
+import FuzzHelpers exposing (..)
 import Data.Routing as Routing exposing (Route(..))
 import Data.Survey exposing (SurveyId(..))
 
@@ -13,7 +14,7 @@ locationParsing =
     describe "Routing.parseLocation"
         [ describe "valid paths can be round-tripped"
             [ testLocation Routing.indexPath (Just IndexRoute)
-            , fuzz (int |> Fuzz.map abs) "SurveyRoute" <|
+            , fuzz (positive int) "SurveyRoute" <|
                 \id ->
                     expectLocation
                         (Routing.surveyPath <| SurveyId id)
