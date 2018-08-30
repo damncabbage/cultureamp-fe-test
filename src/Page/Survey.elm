@@ -10,9 +10,9 @@ import Api
 import Api.Types exposing (SurveyFromApi)
 import Data.Url exposing (Url)
 import Data.Msg exposing (RootMsg)
-import Data.Survey as Survey exposing (Survey, SurveyId(..), surveyIdToString)
+import Data.Survey as Survey exposing (Survey, SurveyId(..), Theme, surveyIdToString)
 import Helpers exposing (updateWith)
-import Page.Survey.Types exposing (Model, Msg(..), SurveyForUI, BreakdownState(..))
+import Page.Survey.Types exposing (Model, Msg(..), QuestionForUI, QuestionId(..), SurveyForUI, BreakdownState(..))
 
 
 {-| Initialise the complete "component" state.
@@ -41,7 +41,7 @@ initSurvey survey =
                     { description = q.description
                     , questionType = q.questionType
                     , responses = q.responses
-                    , localId = idx + 1 -- 1, 2, ...
+                    , localId = QuestionId (idx + 1) -- 1, 2, ...
                     , hasBeenOpenedBefore = False
                     , breakdownState = IsClosed
                     }
@@ -69,13 +69,13 @@ view id uplift model =
         [ text ("ID: " ++ (surveyIdToString id) ++ ", ")
         , EDict.get id model
             |> Maybe.map
-                (Html.map uplift << surveyView id)
+                (viewSurvey id >> Html.map uplift)
             |> Maybe.withDefault (text "Doesn't exist")
         ]
 
 
-surveyView : SurveyId -> WebData SurveyForUI -> Html Msg
-surveyView id loadingState =
+viewSurvey : SurveyId -> WebData SurveyForUI -> Html Msg
+viewSurvey id loadingState =
     case loadingState of
         NotAsked ->
             text "loading..."
@@ -89,6 +89,33 @@ surveyView id loadingState =
         Success a ->
             text (toString a)
 
+
+viewTheme : Theme {} -> Html a
+viewTheme q =
+    div [] []
+
+viewQuestion : QuestionForUI -> Html QuestionForUI
+viewQuestion q =
+    div [] []
+
+{-
+traverseHtml : String -> List (Attribute b) -> (List a -> b) -> (Int -> a -> List (Html a)) -> List a -> Html b
+traverseHtml tagName attrs b2c ahb aa =
+    buildHtmlList ab ahb as
+
+buildHtmlList : (a -> b) -> (Int -> a -> List (Html b)) -> List a -> List (Html (List b))
+buildHtmlList ab abh aa =
+    let
+        bs = List.map ab aa
+    in
+        List.mapWithIndex (\i a ->
+                ?.map (List.map (\b -> Maybe.withDefault bs (Array
+            ) aa
+            |> List.concat
+
+   in join $ flip mapWithIndex as $ \i a ->
+map (map (\b -> fromMaybe bs $ Array.updateAt i b bs)) <<< abh i $ a
+-}
 
 update : Url -> Msg -> (Msg -> RootMsg) -> Model -> ( Model, Cmd RootMsg )
 update baseUrl msg uplift model =
