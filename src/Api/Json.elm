@@ -9,7 +9,7 @@ import Data.Survey as Survey exposing (Question, QuestionType(..), Rating(..), R
 import Data.Url exposing (Url(..))
 
 
-indexDecoder : Decoder (List Summary)
+indexDecoder : Decoder Survey.Index
 indexDecoder =
     Decode.field "survey_results" (Decode.list summaryDecoder)
 
@@ -28,23 +28,12 @@ surveyDecoder =
 
 summaryDecoder : Decoder Summary
 summaryDecoder =
-    let
-        makeSummary name url total responses rate =
-            { name = name
-            , url = url
-            , participant =
-                { totalCount = total
-                , responseCount = responses
-                , responseRate = rate
-                }
-            }
-    in
-        decode makeSummary
-            |> required "name" Decode.string
-            |> required "url" urlDecoder
-            |> required "participant_count" (positiveDecoder Decode.int)
-            |> required "submitted_response_count" (positiveDecoder Decode.int)
-            |> required "response_rate" (positiveDecoder Decode.float)
+    decode Summary
+        |> required "name" Decode.string
+        |> required "url" urlDecoder
+        |> required "participant_count" (positiveDecoder Decode.int)
+        |> required "submitted_response_count" (positiveDecoder Decode.int)
+        |> required "response_rate" (positiveDecoder Decode.float)
 
 
 themeDecoder : Decoder (Theme (Question {}))
