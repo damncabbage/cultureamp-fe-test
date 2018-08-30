@@ -7,10 +7,10 @@
     "build": "webpack --mode production",
     "clean": "echo 'Cleaning up dist/; ^C to get out' && read && rm -rf dist/",
     "watch": "webpack --mode development --watch",
-    "test": "echo TODO && false",
+    "test": "elm-test",
     "start": "set -u && webpack-dev-server --mode development --port $WEBPACK_PORT --history-api-fallback",
     "errors": "webpack --mode development --display-error-details",
-    "format": "elm-format src/"
+    "format": "elm-format src/ tests/"
   },
   "keywords": [],
   "author": "Rob Howard <rob@robhoward.id.au>",
@@ -21,6 +21,7 @@
     "css-loader": "^1.0.0",
     "elm-css-modules-loader": "^2.1.5",
     "elm-format": "^0.6.1-alpha",
+    "elm-test": "^0.18.13-beta",
     "elm-webpack-loader": "^4.5.0",
     "file-loader": "^1.1.11",
     "loader-utils": "^1.1.0",
