@@ -2,10 +2,6 @@ module Data.Routing exposing (..)
 
 import Navigation exposing (Location)
 import UrlParser exposing (..)
-
-
--- Internal imports
-
 import Data.Survey exposing (SurveyId(..))
 
 
