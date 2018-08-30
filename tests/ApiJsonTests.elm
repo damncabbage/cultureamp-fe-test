@@ -56,14 +56,16 @@ encodeSummary summary =
         , ( "response_rate", Encode.float <| summary.participantResponseRate )
         ]
 
+
 genIndex : Fuzzer Survey.Index
 genIndex =
     list genSummary
-    
+
+
 genSummary : Fuzzer Survey.Summary
 genSummary =
     Fuzz.map Survey.Summary string
-    |> Fuzz.andMap (string |> Fuzz.map Url)
-    |> Fuzz.andMap (positive int)
-    |> Fuzz.andMap (positive int)
-    |> Fuzz.andMap (positive float)
+        |> Fuzz.andMap (string |> Fuzz.map Url)
+        |> Fuzz.andMap (positive int)
+        |> Fuzz.andMap (positive int)
+        |> Fuzz.andMap (positive float)

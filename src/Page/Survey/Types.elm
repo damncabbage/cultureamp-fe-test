@@ -32,7 +32,6 @@ type alias Model =
 
 
 type Msg
-    = OpenBreakdown SurveyId
-    | CloseBreakdown SurveyId
+    = UpdateSurveyModel SurveyId SurveyForUI
     | LoadStart SurveyId
     | LoadFinish SurveyId (WebData SurveyFromApi)

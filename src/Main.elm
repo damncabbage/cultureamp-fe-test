@@ -9,7 +9,7 @@ import Navigation exposing (Location, newUrl)
 import Data.Msg exposing (RootMsg(..))
 import Data.Routing as Routing exposing (Route(..), routeToPath)
 import Data.Url exposing (Url(..))
-import Helpers exposing (updateWith)
+import Helpers.Update exposing (updateWith)
 import Page.Index
 import Page.Index.Types
 import Page.Survey
@@ -33,23 +33,15 @@ type alias Model =
 
 view : Model -> Html RootMsg
 view { route, pageIndex, pageSurvey } =
-    let
-        subview =
-            case route of
-                Just IndexRoute ->
-                    Page.Index.view IndexMsg pageIndex
+    case route of
+        Just IndexRoute ->
+            Page.Index.view IndexMsg pageIndex
 
-                Just (SurveyRoute id) ->
-                    Page.Survey.view id SurveyMsg pageSurvey
+        Just (SurveyRoute id) ->
+            Page.Survey.view id SurveyMsg pageSurvey
 
-                Nothing ->
-                    Page.NotFound.view
-    in
-        div
-            [ class .papayawhip ]
-            [ text (toString route)
-            , subview
-            ]
+        Nothing ->
+            Page.NotFound.view
 
 
 init : Flags -> Location -> ( Model, Cmd RootMsg )

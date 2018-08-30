@@ -14,7 +14,7 @@ import Data.Survey as Survey exposing (SurveyId(..))
 import Data.Routing as Routing
 import Data.Survey exposing (Survey)
 import Data.Url exposing (Url)
-import Helpers exposing (updateWith)
+import Helpers.Update exposing (updateWith)
 import Page.Index.Types exposing (Model, Msg(..))
 
 

@@ -1,4 +1,4 @@
-module Helpers exposing (..)
+module Helpers.Update exposing (..)
 
 
 updateWith : (subModel -> rootModel) -> (msg -> rootMsg) -> ( subModel, Cmd msg ) -> ( rootModel, Cmd rootMsg )

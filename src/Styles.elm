@@ -6,4 +6,6 @@ import CssModules exposing (css)
 { class } =
     css "./Main.css"
         { papayawhip = ""
+        , contentColumn = ""
+        , backLink = ""
         }

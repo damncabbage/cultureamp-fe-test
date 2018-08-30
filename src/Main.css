@@ -1,4 +1,41 @@
+@import "~normalize.css/normalize.css";
+
+@value backgroundPrimary: #fffdfb;
+@value backgroundHighlight: #bbb6df;
+@value backgroundHighlighter: #d0d2f1;
+@value primary: #a30b37;
+@value secondary: #77748e;
+@value tertiary: #bd6b73;
+
+@value sansStack: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+@value serifStack: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
+
+:global(body) {
+  background: backgroundPrimary;
+  font-family: sansStack;
+  font-size: 16px;
+}
+
+.contentColumn {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+@media only screen (max-device-width: 812px) {
+  .contentColumn {
+    max-width: auto;
+    width: auto;
+  }
+}
+
+.backLink {
+}
+
 .papayawhip {
-  background: papayawhip;
+  background: white;
+  color: secondary;
+  font-weight: 800;
   padding: 40px;
 }
