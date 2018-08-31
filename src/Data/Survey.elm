@@ -52,6 +52,13 @@ type QuestionType
     = RatingQuestion
 
 
+{-| This is an extensible type representing a survey question; it's extensible because
+we could plug the gap with {} (eg. Question {}) to represent the bare information coming
+back from the API, or we could provide something like Question { infoIsOpen : Bool }, where
+additional information is used for the UI state, without needing to make a completely
+separate type for it; Page.Survey.Types.QuestionForUI is an example of this for-UI
+extended type.
+-}
 type alias Question a =
     { a
         | description : String
