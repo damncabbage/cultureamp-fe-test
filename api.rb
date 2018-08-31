@@ -25,4 +25,27 @@ class SurveyAPI < Sinatra::Base
   error(400) { error_json('Bad input') }
   error(404) { error_json('Not found') }
   error(500) { error_json('Server error') }
+
+  # This should never go in a production server, but I'm adding
+  # it here for Fun Time testing opportunities.
+  if ENV['FLAKEOUT']
+    before do
+      flake = -> (msg) {
+        out = "!!! FLAKEOUT: #{msg} !!!"
+        puts ("!" * out.length)
+        puts out
+        puts ("!" * out.length)
+      }
+      case rand(1..3)
+      when 1
+        flake.call "Sleeping..."
+        sleep 3
+      when 2
+        flake.call "Erroring..."
+        raise "Server is flaking out..."
+      when 3
+        flake.call "Fine! This time."
+      end
+    end
+  end
 end
