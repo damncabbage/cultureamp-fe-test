@@ -2,7 +2,8 @@ Culture Amp Frontend Test
 =========================
 
 
-## Setup
+Setup
+-------------------------
 
 Requirements:
 * [Node.js 8+](https://nodejs.org/en/download/)
@@ -46,7 +47,17 @@ bundle exec rake
 ```
 
 
-## Notes
+### Flake-Out Mode
+
+There's another mode (works in both development and production) that has the API sometimes be slow, or raise HTTP 500s; you can start it with:
+
+```
+env FLAKEOUT=1 bundle exec foreman start
+```
+
+
+Notes
+-------------------------
 
 ### Assumptions
 
