@@ -35,6 +35,7 @@ class SurveyAPI < Sinatra::Base
         puts ("!" * out.length)
         puts out
         puts ("!" * out.length)
+        STDOUT.flush
       }
       case rand(1..3)
       when 1
@@ -44,7 +45,6 @@ class SurveyAPI < Sinatra::Base
         flake.call "Erroring..."
         raise "Server is flaking out..."
       when 3
-        flake.call "Fine! This time."
       end
     end
   end
