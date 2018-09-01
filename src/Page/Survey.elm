@@ -1,7 +1,7 @@
 module Page.Survey exposing (..)
 
 import EveryDict as EDict exposing (EveryDict)
-import Html exposing (Html, Attribute, a, div, h1, h2, header, main_, nav, section, span, text)
+import Html exposing (Html, Attribute, a, div, h1, h2, h3, header, li, main_, nav, ol, section, span, text)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Html.Events.Extra exposing (onClickPreventDefault)
@@ -164,7 +164,8 @@ viewTheme id theme =
                     [ text theme.name ]
                 ]
             ]
-        , div [ Common.class .paddedContentColumn ]
+        , ol
+            [ class .questionsList ]
             ( Nonempty.toList theme.questions
                 |> List.map viewQuestion
             )
@@ -172,10 +173,13 @@ viewTheme id theme =
 
 
 viewQuestion : QuestionForUI -> Html a
-viewQuestion q =
-    div
+viewQuestion { description, questionType, responses } =
+    li
         []
-        [ text (toString q) ]
+        [ h3
+            [ class .questionDescription ]
+            [ text description ]
+        ]
 
 
 update : (Msg -> RootMsg) -> Url -> Msg -> Model -> ( Model, Cmd RootMsg )

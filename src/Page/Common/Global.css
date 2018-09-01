@@ -23,9 +23,9 @@
 @value type-nav-size from type;
 @value type-nav-height from type;
 @value type-nav-spacing from type;
-@value type-base-size from type;
-@value type-base-height from type;
-@value type-base-spacing from type;
+@value type-body-size from type;
+@value type-body-height from type;
+@value type-body-spacing from type;
 @value type-banner-size from type;
 @value type-banner-height from type;
 @value type-banner-spacing from type;
@@ -44,8 +44,8 @@
   background: color-bg-body;
   font-family: type-stack-sans;
   font-weight: type-weight-bodycopy;
-  font-size: type-base-size;
-  line-height: type-base-height;
-  letter-spacing: type-base-spacing;
+  font-size: type-body-size;
+  line-height: type-body-height;
+  letter-spacing: type-body-spacing;
   color: color-text-base;
 }

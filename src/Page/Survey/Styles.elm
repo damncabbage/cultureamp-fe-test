@@ -7,4 +7,6 @@ import CssModules exposing (css)
     css "./Page/Survey.css"
         { themeHeading = ""
         , stickyBar = ""
+        , questionsList = ""
+        , questionDescription = ""
         }

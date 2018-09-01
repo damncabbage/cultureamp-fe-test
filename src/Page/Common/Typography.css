@@ -5,9 +5,12 @@
 @value type-weight-semibold: 600;
 
 /* There's no ratios going on here. */
-@value type-base-size: 16px;
-@value type-base-height: 1.5;
-@value type-base-spacing: normal;
+@value type-body-size: 16px;
+@value type-body-height: 1.5;
+@value type-body-spacing: normal;
+@value type-bigbody-size: 20px;
+@value type-bigbody-height: 1.5;
+@value type-bigbody-spacing: normal;
 @value type-banner-size: 36px;
 @value type-banner-height: 1.5;
 @value type-banner-spacing: normal;

@@ -4,22 +4,31 @@
 @value color: "./Common/Color.css";
 @value color-link-base from color;
 @value color-link-hover from color;
+@value palette-mist from color;
+@value palette-soap from color;
 
 @value type: "./Common/Typography.css";
+@value type-stack-sans from type;
+@value type-stack-serif from type;
 @value type-weight-bodycopy from type;
 @value type-weight-semibold from type;
 @value type-nav-size from type;
 @value type-nav-height from type;
 @value type-nav-spacing from type;
-@value type-base-size from type;
-@value type-base-height from type;
-@value type-base-spacing from type;
+@value type-body-size from type;
+@value type-body-height from type;
+@value type-body-spacing from type;
+@value type-bigbody-size from type;
+@value type-bigbody-height from type;
+@value type-bigbody-spacing from type;
 @value type-banner-size from type;
 @value type-banner-height from type;
 @value type-banner-spacing from type;
 @value type-subhead-size from type;
 @value type-subhead-height from type;
 @value type-subhead-spacing from type;
+
+@value ol-li-left-indent: calc(type-banner-size * 1.5);
 
 .themeHeading {
   display: block;
@@ -35,4 +44,44 @@
   position: -webkit-sticky; /* TODO: autoprefixer */
   position: sticky;
   top: 0px;
+  z-index: 1;
+}
+
+.questionsList {
+  composes: paddedContentColumn from "./Common.css";
+  list-style: none;
+  counter-reset: themes-list-counter;
+}
+.questionsList > li {
+  counter-increment: themes-list-counter;
+  position: relative;
+  margin-bottom: layout-spacing;
+  display: block;
+  min-height: 3em;
+  left: ol-li-left-indent;
+  width: calc(100% - ol-li-left-indent);
+}
+.questionsList > li::before {
+  content: counter(themes-list-counter) ". ";
+  color: palette-soap;
+  font-family: type-stack-serif;
+  font-size: calc(type-banner-size * 1.5);
+  line-height: 1;
+  position: absolute;
+  top: -5px; /* Negate the glyph padding */
+  left: calc(type-banner-size * -1.5 - 2px);
+}
+@media screen and (device-width < 800px) {
+  .questionsList > li::before {
+    font-size: type-banner-size;
+  }
+}
+
+.questionDescription {
+  font-size: type-bigbody-size;
+  line-height: type-bigbody-height;
+  letter-spacing: type-bigbody-spacing;
+  font-weight: type-weight-bodycopy;
+  margin: 0;
+  padding: 0;
 }

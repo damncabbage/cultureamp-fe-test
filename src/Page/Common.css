@@ -26,9 +26,12 @@
 @value type-nav-size from type;
 @value type-nav-height from type;
 @value type-nav-spacing from type;
-@value type-base-size from type;
-@value type-base-height from type;
-@value type-base-spacing from type;
+@value type-body-size from type;
+@value type-body-height from type;
+@value type-body-spacing from type;
+@value type-bigbody-size from type;
+@value type-bigbody-height from type;
+@value type-bigbody-spacing from type;
 @value type-banner-size from type;
 @value type-banner-height from type;
 @value type-banner-spacing from type;
@@ -106,6 +109,9 @@
   composes: dialog;
   text-align: center;
   background: palette-ivory;
+  font-size: type-bigbody-size;
+  line-height: type-bigbody-height;
+  letter-spacing: type-bigbody-spacing;
 }
 
 .errorBox {
