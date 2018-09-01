@@ -1,0 +1,38 @@
+@value layout: "./Common/Layout.css";
+@value layout-spacing from layout;
+
+@value color: "./Common/Color.css";
+@value color-link-base from color;
+@value color-link-hover from color;
+
+@value type: "./Common/Typography.css";
+@value type-weight-bodycopy from type;
+@value type-weight-semibold from type;
+@value type-nav-size from type;
+@value type-nav-height from type;
+@value type-nav-spacing from type;
+@value type-base-size from type;
+@value type-base-height from type;
+@value type-base-spacing from type;
+@value type-banner-size from type;
+@value type-banner-height from type;
+@value type-banner-spacing from type;
+@value type-subhead-size from type;
+@value type-subhead-height from type;
+@value type-subhead-spacing from type;
+
+.themeHeading {
+  display: block;
+  font-size: type-subhead-size;
+  line-height: type-subhead-height;
+  letter-spacing: type-subhead-spacing;
+  margin: 0 0 calc(layout-spacing / 2);
+  padding: 0;
+}
+
+.stickyBar {
+  composes: horizontalBar from "./Common.css";
+  position: -webkit-sticky; /* TODO: autoprefixer */
+  position: sticky;
+  top: 0px;
+}

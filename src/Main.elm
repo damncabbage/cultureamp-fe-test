@@ -15,7 +15,7 @@ import Page.Index.Types
 import Page.Survey
 import Page.Survey.Types
 import Page.NotFound
-import Styles exposing (class)
+import Page.Common.Styles as Common
 
 
 type alias Flags =
@@ -38,7 +38,7 @@ view { route, pageIndex, pageSurvey } =
             Page.Index.view IndexMsg pageIndex
 
         Just (SurveyRoute id) ->
-            Page.Survey.view id SurveyMsg pageSurvey
+            Page.Survey.view SurveyMsg id pageSurvey
 
         Nothing ->
             Page.NotFound.view
@@ -69,13 +69,13 @@ update msg model =
             )
 
         IndexMsg subMsg ->
-            Page.Index.update model.apiBaseUrl subMsg IndexMsg
+            Page.Index.update IndexMsg model.apiBaseUrl subMsg
                 |> updateWith
                     (\si -> { model | pageIndex = si })
                     identity
 
         SurveyMsg subMsg ->
-            Page.Survey.update model.apiBaseUrl subMsg SurveyMsg model.pageSurvey
+            Page.Survey.update SurveyMsg model.apiBaseUrl subMsg model.pageSurvey
                 |> updateWith
                     (\sm -> { model | pageSurvey = sm })
                     identity

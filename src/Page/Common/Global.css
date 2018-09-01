@@ -1,0 +1,51 @@
+@import "~normalize.css/normalize.css";
+
+@value color: "./Color.css";
+@value palette-ivory from color;
+@value palette-cream from color;
+@value palette-ruby from color;
+@value palette-clay from color;
+@value palette-carnation from color;
+@value palette-charcoal from color;
+@value palette-soap from color;
+@value palette-mist from color;
+@value palette-celeste from color;
+@value color-bg-body from color;
+@value color-text-base from color;
+@value color-link-base from color;
+@value color-link-hover from color;
+
+@value type: "./Typography.css";
+@value type-stack-sans from type;
+@value type-stack-serif from type;
+@value type-weight-bodycopy from type;
+@value type-weight-semibold from type;
+@value type-nav-size from type;
+@value type-nav-height from type;
+@value type-nav-spacing from type;
+@value type-base-size from type;
+@value type-base-height from type;
+@value type-base-spacing from type;
+@value type-banner-size from type;
+@value type-banner-height from type;
+@value type-banner-spacing from type;
+@value type-subhead-size from type;
+@value type-subhead-height from type;
+@value type-subhead-spacing from type;
+
+:global(html) {
+  box-sizing: border-box;
+}
+:global(*), :global(*:before), :global(*:after) {
+  box-sizing: inherit;
+}
+
+:global(body) {
+  background: color-bg-body;
+  font-family: type-stack-sans;
+  font-weight: type-weight-bodycopy;
+  font-size: type-base-size;
+  line-height: type-base-height;
+  letter-spacing: type-base-spacing;
+  color: color-text-base;
+}

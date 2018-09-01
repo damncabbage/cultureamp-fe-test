@@ -16,6 +16,8 @@ import Data.Survey exposing (Survey)
 import Data.Url exposing (Url)
 import Helpers.Update exposing (updateWith)
 import Page.Index.Types exposing (Model, Msg(..))
+import Page.Common.Styles as Common
+import Page.Index.Styles as Index
 
 
 initModel : Model
@@ -33,18 +35,18 @@ initLoad baseUrl =
 
 
 view : (Msg -> RootMsg) -> Model -> Html RootMsg
-view uplift model =
+view lift model =
     div
         [ onClick (ChangeLocation (SurveyRoute (SurveyId 1))) ]
         [ text (toString model) ]
 
 
-update : Url -> Msg -> (Msg -> RootMsg) -> ( Model, Cmd RootMsg )
-update baseUrl msg uplift =
+update : (Msg -> RootMsg) -> Url -> Msg -> ( Model, Cmd RootMsg )
+update lift baseUrl msg =
     case msg of
         LoadStart ->
             initLoad baseUrl
-                |> updateWith identity uplift
+                |> updateWith identity lift
 
         LoadFinish data ->
             ( data

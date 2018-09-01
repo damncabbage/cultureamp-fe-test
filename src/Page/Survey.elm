@@ -1,9 +1,10 @@
 module Page.Survey exposing (..)
 
 import EveryDict as EDict exposing (EveryDict)
-import Html exposing (Html, Attribute, a, div, h1, header, nav, text)
+import Html exposing (Html, Attribute, a, div, h1, h2, header, main_, nav, section, span, text)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
+import Html.Events.Extra exposing (onClickPreventDefault)
 import Http
 import List.Nonempty as Nonempty
 import RemoteData exposing (WebData, RemoteData(..))
@@ -15,9 +16,11 @@ import Data.Msg exposing (RootMsg(..))
 import Data.Survey as Survey exposing (Survey, SurveyId(..), Theme, surveyIdToString)
 import Data.Routing as Route exposing (Route(..))
 import Helpers.Update exposing (updateWith)
-import Helpers.Html exposing (changeLocationLink)
 import Page.Survey.Types exposing (Model, Msg(..), QuestionForUI, QuestionId(..), SurveyForUI, BreakdownState(..))
-import Styles exposing (class)
+import Page.Common as Common
+import Page.Common.Styles as Common
+import Page.Survey.Styles as Survey exposing (class, classList)
+
 
 {-| Initialise the complete "component" state.
 -}
@@ -44,6 +47,8 @@ initSurvey survey =
                     { description = q.description
                     , questionType = q.questionType
                     , responses = q.responses
+
+                    -- Initialise UI-specific annotations:
                     , localId = QuestionId (idx + 1) -- 1, 2, ...
                     , hasBeenOpenedBefore = False
                     , breakdownState = IsClosed
@@ -54,71 +59,116 @@ initSurvey survey =
 
 initLoad : Model -> Url -> SurveyId -> ( Model, Cmd Msg )
 initLoad model baseUrl id =
-    if EDict.member id model then
-        ( model, Cmd.none )
-    else
-        ( EDict.insert id Loading model
-        , Api.getSurvey baseUrl id
-            |> Http.toTask
-            |> Task.attempt (RemoteData.fromResult >> LoadFinish id)
-        )
+    case EDict.get id model of
+        Just (Success _) ->
+            ( model, Cmd.none )
+
+        _ ->
+            ( EDict.insert id Loading model
+            , Api.getSurvey baseUrl id
+                |> Http.toTask
+                |> Task.attempt (RemoteData.fromResult >> LoadFinish id)
+            )
 
 
 content : Attribute a
 content =
-    class .contentColumn
+    Common.class .contentColumn
 
 
-view : SurveyId -> (Msg -> RootMsg) -> Model -> Html RootMsg
-view id uplift model =
-    div []
-        [ nav
-            [ content ]
-            [ changeLocationLink IndexRoute
-                    [ class .backLink ]
-                    [ text "⬅ Back to Surveys" ]
+view : (Msg -> RootMsg) -> SurveyId -> Model -> Html RootMsg
+view lift id model =
+    let
+        ( header, body ) =
+            EDict.get id model
+                |> Maybe.map (viewSurvey lift id)
+                |> Maybe.withDefault
+                    ( [], [Common.viewNotFoundError] )
+    in
+        div []
+            [ div
+                [ Common.class .horizontalBar ]
+                ( List.concat
+                    [ [ Common.viewBack ]
+                    , header
+                    ]
+                )
+            , main_ [] body
             ]
-        , EDict.get id model
-            |> Maybe.map
-                (viewSurvey id >> Html.map uplift)
-            |> Maybe.withDefault (text "Doesn't exist") -- TODO: Errors
-        ]
 
-viewSurvey : SurveyId -> WebData SurveyForUI -> Html a
-viewSurvey id loadingState =
+
+viewSurvey : (Msg -> RootMsg) -> SurveyId -> WebData SurveyForUI -> ( List (Html RootMsg), List (Html RootMsg) )
+viewSurvey lift id loadingState =
     case loadingState of
         NotAsked ->
-            text "loading..."
+            ( [], [Common.viewLoading] )
 
         Loading ->
-            text "loading..."
+            ( [], [Common.viewLoading] )
 
         Failure e ->
-            text ("Failed! " ++ (toString e))
+            ( [], [viewError lift id e] )
 
         Success a ->
             viewLoadedSurvey id a
 
-viewLoadedSurvey : SurveyId -> SurveyForUI -> Html a
-viewLoadedSurvey id survey =
+
+viewError : (Msg -> RootMsg) -> SurveyId -> Http.Error -> Html RootMsg
+viewError lift id error =
+    if Common.is404 error then
+        Common.viewNotFoundError
+    else
+        Html.map lift (viewLoadingError id)
+
+
+viewLoadingError : SurveyId -> Html Msg
+viewLoadingError id =
     div
-        [ content ]
-        [ header
-            [ content ]
-            [ h1 [ ] [ text survey.summary.name ]
+        [ Common.class .errorBox ]
+        [ text "Sorry! There was a problem fetching that survey for you. Would you like to "
+        , a
+            [ onClickPreventDefault (LoadStart id)
+            , href (Route.routeToPath (SurveyRoute id))
             ]
-        , div [] (Nonempty.toList survey.themes |> List.map (viewTheme id))
+            [ text "try again?" ]
         ]
-{-
-    div
-        []
-        [ text ("ID: " ++ (surveyIdToString id) ++ ", ")
-        -}
+
+
+viewLoadedSurvey : SurveyId -> SurveyForUI -> ( List (Html a), List (Html a) )
+viewLoadedSurvey id survey =
+    ( [ header
+        [ Common.class .paddedContentColumn ]
+        [ h1
+            [ Common.class .bannerHeading ]
+            [ text survey.summary.name ]
+        ]
+      ]
+    , Nonempty.toList survey.themes
+        |> List.map (viewTheme id)
+    )
 
 
 viewTheme : SurveyId -> Theme QuestionForUI -> Html a
 viewTheme id theme =
-    div [] []
+    section []
+        [ div
+            [ class .stickyBar ]
+            [ div
+                [ Common.classList
+                    [ (.paddedContentColumn, True)
+                    , (.navContainer, True)
+                    ]
+                ]
+                [ h2
+                    [ class .themeHeading ]
+                    [ text theme.name ]
+                ]
+            ]
+        , div [ Common.class .paddedContentColumn ]
+            ( Nonempty.toList theme.questions
+                |> List.map viewQuestion
+            )
+        ]
 
 
 viewQuestion : QuestionForUI -> Html a
@@ -128,8 +178,8 @@ viewQuestion q =
         [ text (toString q) ]
 
 
-update : Url -> Msg -> (Msg -> RootMsg) -> Model -> ( Model, Cmd RootMsg )
-update baseUrl msg uplift model =
+update : (Msg -> RootMsg) -> Url -> Msg -> Model -> ( Model, Cmd RootMsg )
+update lift baseUrl msg model =
     case msg of
         UpdateSurveyModel id survey ->
             ( model
@@ -139,7 +189,7 @@ update baseUrl msg uplift model =
 
         LoadStart id ->
             initLoad model baseUrl id
-                |> updateWith identity uplift
+                |> updateWith identity lift
 
         LoadFinish id data ->
             ( model

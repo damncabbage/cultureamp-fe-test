@@ -1,0 +1,119 @@
+@import "./Common/Global.css";
+
+@value layout: "./Common/Layout.css";
+@value layout-column-width-max from layout;
+@value layout-dialog-width-max from layout;
+@value layout-spacing from layout;
+
+@value color: "./Common/Color.css";
+@value palette-ivory from color;
+@value palette-cream from color;
+@value palette-ruby from color;
+@value palette-clay from color;
+@value palette-carnation from color;
+@value palette-charcoal from color;
+@value palette-soap from color;
+@value palette-mist from color;
+@value palette-celeste from color;
+@value color-bg-body from color;
+@value color-text-base from color;
+@value color-link-base from color;
+@value color-link-hover from color;
+
+@value type: "./Common/Typography.css";
+@value type-weight-bodycopy from type;
+@value type-weight-semibold from type;
+@value type-nav-size from type;
+@value type-nav-height from type;
+@value type-nav-spacing from type;
+@value type-base-size from type;
+@value type-base-height from type;
+@value type-base-spacing from type;
+@value type-banner-size from type;
+@value type-banner-height from type;
+@value type-banner-spacing from type;
+@value type-subhead-size from type;
+@value type-subhead-height from type;
+@value type-subhead-spacing from type;
+
+/* Elements */
+
+.link, .link:link, .link:visited {
+  color: color-link-base;
+  text-decoration: underline;
+}
+
+.link:hover, .link:active {
+  color: color-link-hover;
+}
+
+
+/* Layout */
+
+.contentColumn {
+  max-width: layout-column-width-max;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.paddedContentColumn {
+  composes: contentColumn;
+  padding-left: layout-spacing;
+  padding-right: layout-spacing;
+}
+
+
+/* Features */
+
+.navLink, .navLink:link, .navLink:visited {
+  color: color-link-base;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: type-nav-size;
+  line-height: type-nav-height;
+  letter-spacing: type-nav-spacing;
+}
+
+.navLink:hover, .navLink:active {
+  color: color-link-hover;
+}
+
+.navContainer {
+  margin-bottom: calc(layout-spacing / 2);
+  padding-top: layout-spacing;
+}
+
+.horizontalBar {
+  background: palette-ivory;
+  padding-bottom: calc(layout-spacing / 2);
+}
+
+.bannerHeading {
+  font-size: type-banner-size;
+  line-height: type-banner-height;
+  letter-spacing: type-banner-spacing;
+  margin: 0 0 calc(layout-spacing / 2);
+  padding: 0;
+}
+
+.dialog {
+  max-width: layout-dialog-width-max;
+  margin: calc(layout-spacing * 4) auto;
+  padding: calc(layout-spacing * 2) calc(layout-spacing * 3);
+}
+
+.loadingBox {
+  composes: dialog;
+  text-align: center;
+  background: palette-ivory;
+}
+
+.errorBox {
+  composes: dialog;
+  text-align: center;
+  background: palette-carnation;
+}
+
+.spinner {
+  composes: spinner from "./Common/Spinner.css";
+}

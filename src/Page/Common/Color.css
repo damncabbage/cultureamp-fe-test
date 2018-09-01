@@ -1,0 +1,17 @@
+@value palette-ivory: #fffefe;
+@value palette-cream: #fefcfa;
+
+@value palette-ruby: #a30b37;
+@value palette-clay: #bd6b73;
+@value palette-carnation: #f8eaee; /*#f6e8ec;*/
+/*@value palette-carnation: #eed2da;*/
+
+@value palette-charcoal: #36454F;
+@value palette-soap: #bbb6df;
+@value palette-mist: #c6c8ee;
+@value palette-celeste: #e5e6f7;
+
+@value color-bg-body: palette-cream;
+@value color-text-base: palette-charcoal;
+@value color-link-base: palette-ruby;
+@value color-link-hover: palette-clay;
