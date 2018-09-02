@@ -1,0 +1,29 @@
+@import "~normalize.css/normalize.css";
+
+@value color: "./Color.css";
+@value color-bg-body from color;
+@value color-text-base from color;
+
+@value type: "./Typography.css";
+@value type-stack-sans from type;
+@value type-weight-bodycopy from type;
+@value type-body-size from type;
+@value type-body-height from type;
+@value type-body-spacing from type;
+
+:global(html) {
+  box-sizing: border-box;
+}
+:global(*), :global(*:before), :global(*:after) {
+  box-sizing: inherit;
+}
+
+:global(body) {
+  background: color-bg-body;
+  font-family: type-stack-sans;
+  font-weight: type-weight-bodycopy;
+  font-size: type-body-size;
+  line-height: type-body-height;
+  letter-spacing: type-body-spacing;
+  color: color-text-base;
+}

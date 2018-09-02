@@ -10,7 +10,7 @@ import Data.Survey exposing (Summary, Survey, SurveyId)
 import Data.Url as Url exposing (Url)
 
 
-getIndex : Url -> Http.Request (List Summary)
+getIndex : Url -> Http.Request (List ( SurveyId, Summary ))
 getIndex baseUrl =
     get (indexUrl baseUrl) Api.Json.indexDecoder
 

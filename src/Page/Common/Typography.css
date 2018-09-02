@@ -1,0 +1,25 @@
+@value type-stack-sans: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+@value type-stack-serif: Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
+
+@value type-weight-bodycopy: 400;
+@value type-weight-semibold: 600;
+
+/* There's no ratios going on here. */
+@value type-body-size: 16px;
+@value type-body-height: 1.5;
+@value type-body-spacing: normal;
+@value type-bigbody-size: 20px;
+@value type-bigbody-height: 1.5;
+@value type-bigbody-spacing: normal;
+@value type-banner-size: 28px;
+@value type-banner-height: 1.5;
+@value type-banner-spacing: normal;
+@value type-subhead-size: 22px;
+@value type-subhead-height: 1.3;
+@value type-subhead-spacing: normal;
+@value type-nav-size: 13px;
+@value type-nav-height: 1.1;
+@value type-nav-spacing: 0.6px;
+@value type-summary-size: 14px;
+@value type-summary-height: 1.7;
+@value type-summary-spacing: 0.7px;

@@ -1,17 +1,31 @@
 module Api.Json exposing (..)
 
 import Json.Decode as Decode exposing (Decoder)
-import Json.Decode.Pipeline exposing (decode, hardcoded, required, requiredAt)
+import Json.Decode.Pipeline exposing (custom, decode, hardcoded, required, requiredAt)
 import List.Nonempty as Nonempty exposing (Nonempty(..))
 import Maybe.Extra as Maybe
 import Api.Types exposing (SurveyFromApi)
-import Data.Survey as Survey exposing (Question, QuestionType(..), Rating(..), Response, Survey, Summary, Theme)
+import Api.Url exposing (idFromSurveyUrl)
+import Data.Survey as Survey exposing (Question, QuestionResponses(..), Rating, Response, Survey, Summary, Theme, intToRating)
 import Data.Url exposing (Url(..))
+import Helpers.Json exposing (failDecodeIfNothing)
 
 
 indexDecoder : Decoder Survey.Index
 indexDecoder =
-    Decode.field "survey_results" (Decode.list summaryDecoder)
+    let
+        summaryTupleDecoder =
+            summaryDecoder
+                |> Decode.andThen
+                    (\summary ->
+                        summary.url
+                            |> idFromSurveyUrl
+                            |> failDecodeIfNothing
+                            |> Decode.map (\id -> ( id, summary ))
+                    )
+    in
+        Decode.field "survey_results"
+            (Decode.list summaryTupleDecoder)
 
 
 surveyDecoder : Decoder SurveyFromApi
@@ -33,7 +47,10 @@ summaryDecoder =
         |> required "url" urlDecoder
         |> required "participant_count" (positiveDecoder Decode.int)
         |> required "submitted_response_count" (positiveDecoder Decode.int)
-        |> required "response_rate" (positiveDecoder Decode.float)
+        |> required "response_rate"
+            (positiveDecoder Decode.float
+                |> Decode.map (\x -> x * 100.0)
+            )
 
 
 themeDecoder : Decoder (Theme (Question {}))
@@ -46,63 +63,61 @@ themeDecoder =
 questionDecoder : Decoder (Question {})
 questionDecoder =
     let
-        makeQuestion desc qtype resps =
+        makeQuestion desc resps =
             { description = desc
-            , questionType = qtype
             , responses = resps
             }
-
-        structureDecoder qtype responseDecoder =
-            decode makeQuestion
-                |> required "description" Decode.string
-                |> hardcoded qtype
-                |> required "survey_responses" (Decode.list responseDecoder)
     in
-        Decode.field "question_type" questionTypeDecoder
-            |> Decode.andThen
-                (\questionType ->
-                    case questionType of
-                        -- This is an expansion point for further question types.
-                        RatingQuestion ->
-                            structureDecoder questionType ratingResponseDecoder
-                )
+        decode makeQuestion
+            |> required "description" Decode.string
+            |> custom questionResponsesDecoder
 
 
-questionTypeDecoder : Decoder QuestionType
-questionTypeDecoder =
-    Decode.string
+questionResponsesDecoder : Decoder QuestionResponses
+questionResponsesDecoder =
+    let
+        validRatingResponses =
+            Decode.list ratingResponseDecoder
+                |> Decode.map Maybe.values 
+    in
+
+    Decode.field "question_type" Decode.string
         |> Decode.andThen
             (\questionType ->
                 case questionType of
                     "ratingquestion" ->
-                        Decode.succeed RatingQuestion
+                        decode RatingQuestion
+                            |> required "survey_responses" validRatingResponses
 
                     _ ->
                         Decode.fail ("Unknown question type: " ++ questionType)
             )
 
 
-ratingResponseDecoder : Decoder (Response Rating)
+ratingResponseDecoder : Decoder (Maybe (Response Rating))
 ratingResponseDecoder =
     let
-        makeResponse respondentId response =
-            { respondentId = respondentId
-            , response = response
-            }
+        makeResponse id resultResponse =
+            resultResponse
+            |> Result.toMaybe
+            |> Maybe.map (\res -> { respondentId = id, response = res })
 
         ratingDecoder =
             Decode.string
                 |> Decode.andThen
                     (\str ->
                         if str == "" then
-                            Decode.succeed Nothing
+                            Decode.succeed (Ok Nothing)
                         else
                             case String.toInt str of
                                 Ok num ->
-                                    if num >= 0 || num <= 5 then
-                                        Decode.succeed (Just (Rating num))
-                                    else
-                                        Decode.fail ("Rating outside range: " ++ str)
+                                    (intToRating num)
+                                    |> Maybe.unpack
+                                        (\x ->
+                                            Debug.log ("Rating outside range: " ++ str) (Err x)
+                                        )
+                                        (Ok << Just)
+                                        |> Decode.succeed
 
                                 Err _ ->
                                     Decode.fail ("Not a number: " ++ str)
@@ -141,21 +156,3 @@ nonEmptyListDecoder decoder =
                         (Decode.fail "List is unexpectedly empty")
                         (Decode.succeed)
             )
-
-
-
-{-
-   exactStringDecoder : Nonempty (String -> Decode a) -> Decode a
-   exactStringDecoder nonEmptyMatchers =
-       let
-           matchers =
-               Nonempty.toList nonEmptyMatchers
-       Decode.string
-           |> Decode.andThen (\str ->
-               if (List.any (\x -> x == matcher) matchers) then
-                   Decode.succeed str
-               else
-                   Decode.fail
-                       ("String doesn't match any of: " ++ (toString matchers))
-                   )
--}

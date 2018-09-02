@@ -1,0 +1,25 @@
+@value palette-ivory: #fffefe;
+@value palette-cream: #f9f7f5;
+
+@value palette-ruby: #a30b37;
+@value palette-clay: #bd6b73;
+@value palette-carnation: #f8eaee;
+
+@value palette-charcoal: #36454F;
+@value palette-midgrey: #9192AE;
+@value palette-soap: #bbb6df;
+@value palette-mist: #c6c8ee;
+@value palette-celeste: #e5e6f7;
+
+@value color-bg-body: palette-cream;
+@value color-text-base: palette-charcoal;
+@value color-link-base: palette-ruby;
+@value color-link-hover: palette-clay;
+@value color-lowkey-base: palette-midgrey;
+
+/* Chosen from separate columns from this colour-blind palette:
+ * http://mkweb.bcgsc.ca/colorblind/img/colorblindness.palettes.simple.png
+ */
+@value traffic-green: #0c5b6e; /* blue-green */
+@value traffic-yellow: #af7a2e; /* kind of a brown, really */
+@value traffic-red: #f63565; /* dark red */

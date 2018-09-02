@@ -1,0 +1,62 @@
+@value layout: "./Common/Layout.css";
+@value layout-spacing from layout;
+
+@value color: "./Common/Color.css";
+@value palette-soap from color;
+
+@value type: "./Common/Typography.css";
+@value type-stack-serif from type;
+@value type-weight-bodycopy from type;
+@value type-banner-size from type;
+@value type-banner-height from type;
+@value type-banner-spacing from type;
+
+@value ul-li-left-indent: calc(type-banner-size);
+
+
+.bannerHeadingBlock {
+  composes: paddedContentColumn from "./Common.css";
+  padding-top: calc(layout-spacing * 3);
+}
+
+.surveyHeading {
+  display: block;
+  font-size: type-banner-size;
+  line-height: type-banner-height;
+  letter-spacing: type-banner-spacing;
+  font-weight: type-weight-bodycopy;
+  margin: 0;
+  padding: 0;
+}
+
+.surveyList {
+  margin: calc(layout-spacing * 2) 0;
+  padding: 0;
+  list-style: none;
+}
+.surveyList > li {
+  position: relative;
+  margin-bottom: layout-spacing;
+  display: block;
+  min-height: 3em;
+  left: ul-li-left-indent;
+  width: calc(100% - ul-li-left-indent);
+}
+.surveyList > li::before {
+  content: "•";
+  color: palette-soap;
+  font-family: type-stack-serif;
+  font-size: calc(type-banner-size * 1.5);
+  line-height: 1;
+  position: absolute;
+  top: -2px;
+  left: calc(ul-li-left-indent * -1 - 2px);
+}
+
+.surveyHeadingLink {
+  composes: linkUnderlineOnHover from "./Common.css";
+}
+
+.surveySummary {
+  composes: summaryBar from "./Common.css";
+}

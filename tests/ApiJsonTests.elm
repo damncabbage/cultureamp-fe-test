@@ -9,7 +9,7 @@ import FuzzHelpers exposing (..)
 import Api
 import Api.Json
 import Api.Types as Api exposing (SurveyFromApi)
-import Data.Survey as Survey exposing (SurveyId(..), Summary)
+import Data.Survey as Survey exposing (SurveyId(..), Summary, surveyIdToString)
 import Data.Url exposing (Url(..))
 
 
@@ -38,10 +38,11 @@ indexParsing =
 
 
 encodeIndex : Survey.Index -> Encode.Value
-encodeIndex summaries =
+encodeIndex list =
     Encode.object
         [ ( "survey_results"
-          , Encode.list <| List.map encodeSummary summaries
+          , Encode.list
+            (List.map (\( _, summ ) -> encodeSummary summ) list)
           )
         ]
 
@@ -53,17 +54,31 @@ encodeSummary summary =
         , ( "url", Encode.string <| Data.Url.toString summary.url )
         , ( "participant_count", Encode.int <| summary.participantTotalCount )
         , ( "submitted_response_count", Encode.int <| summary.participantResponseCount )
-        , ( "response_rate", Encode.float <| summary.participantResponseRate )
+        , ( "response_rate", Encode.float <| summary.participantResponseRate / 100.0)
         ]
+
 
 genIndex : Fuzzer Survey.Index
 genIndex =
-    list genSummary
-    
-genSummary : Fuzzer Survey.Summary
-genSummary =
+    genSurveyId
+    |> Fuzz.andThen
+        (\id ->
+            list (Fuzz.map (\summ -> ( id, summ )) (genSummary id))
+        )
+
+
+genSummary : SurveyId -> Fuzzer Survey.Summary
+genSummary id =
     Fuzz.map Survey.Summary string
-    |> Fuzz.andMap (string |> Fuzz.map Url)
-    |> Fuzz.andMap (positive int)
-    |> Fuzz.andMap (positive int)
-    |> Fuzz.andMap (positive float)
+        |> Fuzz.andMap
+            (Fuzz.constant
+                (Url ("/survey_results/" ++ (surveyIdToString id)))
+            )
+        |> Fuzz.andMap (positive int)
+        |> Fuzz.andMap (positive int)
+        |> Fuzz.andMap (floatRange 0.0 100.0)
+
+genSurveyId : Fuzzer SurveyId
+genSurveyId =
+    positive int
+        |> Fuzz.map SurveyId

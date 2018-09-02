@@ -5,7 +5,7 @@ import Data.Survey as Survey exposing (Summary, SurveyId(..))
 
 
 type alias Model =
-    WebData (List Summary)
+    WebData Survey.Index
 
 
 type Msg

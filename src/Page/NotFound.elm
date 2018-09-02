@@ -1,13 +1,15 @@
 module Page.NotFound exposing (..)
 
-import Html exposing (Html, div, text)
-import Html.Events exposing (onClick)
+import Html exposing (Html, div)
 import Data.Msg exposing (RootMsg(..))
-import Data.Routing exposing (Route(..))
-
+import Page.Common as Common
+import Page.Common.Styles as Common
 
 view : Html RootMsg
 view =
-    div
-        [ onClick (ChangeLocation IndexRoute) ]
-        [ text "nah" ]
+    div []
+        [ div
+            [ Common.class .horizontalBar ]
+            [ Common.viewBack ]
+        , Common.viewNotFoundError
+        ]

@@ -9,13 +9,13 @@ import Navigation exposing (Location, newUrl)
 import Data.Msg exposing (RootMsg(..))
 import Data.Routing as Routing exposing (Route(..), routeToPath)
 import Data.Url exposing (Url(..))
-import Helpers exposing (updateWith)
+import Helpers.Update exposing (updateWith)
 import Page.Index
 import Page.Index.Types
 import Page.Survey
 import Page.Survey.Types
 import Page.NotFound
-import Styles exposing (class)
+import Page.Common.Styles as Common
 
 
 type alias Flags =
@@ -33,23 +33,15 @@ type alias Model =
 
 view : Model -> Html RootMsg
 view { route, pageIndex, pageSurvey } =
-    let
-        subview =
-            case route of
-                Just IndexRoute ->
-                    Page.Index.view IndexMsg pageIndex
+    case route of
+        Just IndexRoute ->
+            Page.Index.view IndexMsg pageIndex
 
-                Just (SurveyRoute id) ->
-                    Page.Survey.view id SurveyMsg pageSurvey
+        Just (SurveyRoute id) ->
+            Page.Survey.view SurveyMsg id pageSurvey
 
-                Nothing ->
-                    Page.NotFound.view
-    in
-        div
-            [ class .papayawhip ]
-            [ text (toString route)
-            , subview
-            ]
+        Nothing ->
+            Page.NotFound.view
 
 
 init : Flags -> Location -> ( Model, Cmd RootMsg )
@@ -77,13 +69,13 @@ update msg model =
             )
 
         IndexMsg subMsg ->
-            Page.Index.update model.apiBaseUrl subMsg IndexMsg
+            Page.Index.update IndexMsg model.apiBaseUrl subMsg
                 |> updateWith
                     (\si -> { model | pageIndex = si })
                     identity
 
         SurveyMsg subMsg ->
-            Page.Survey.update model.apiBaseUrl subMsg SurveyMsg model.pageSurvey
+            Page.Survey.update SurveyMsg model.apiBaseUrl subMsg model.pageSurvey
                 |> updateWith
                     (\sm -> { model | pageSurvey = sm })
                     identity
