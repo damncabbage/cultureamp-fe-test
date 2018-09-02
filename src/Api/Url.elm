@@ -28,7 +28,7 @@ idFromSurveyUrl url =
         |> Regex.replace (AtMost 1) (regex "\\.json$") (\_ -> "")
         |> makePathLocation
         |> parsePath (map SurveyId (s "survey_results" </> int))
-        
+
 
 makePathLocation : String -> Location
 makePathLocation path =

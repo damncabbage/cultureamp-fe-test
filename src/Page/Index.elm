@@ -79,6 +79,7 @@ viewLoadingError =
             [ text "try again?" ]
         ]
 
+
 viewLoadedList : List ( SurveyId, Summary ) -> Html RootMsg
 viewLoadedList list =
     if List.length list == 0 then
@@ -88,7 +89,7 @@ viewLoadedList list =
     else
         ul [ class .surveyList ]
             (List.map (\( id, s ) -> viewSummary id s) list)
-        
+
 
 viewSummary : SurveyId -> Summary -> Html RootMsg
 viewSummary id summary =

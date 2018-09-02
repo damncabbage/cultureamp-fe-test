@@ -32,4 +32,4 @@ average ratings =
                     (toFloat ratings) / (toFloat counts)
                 else
                     0.0
-            )
+           )

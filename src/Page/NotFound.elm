@@ -5,6 +5,7 @@ import Data.Msg exposing (RootMsg(..))
 import Page.Common as Common
 import Page.Common.Styles as Common
 
+
 view : Html RootMsg
 view =
     div []

@@ -41,12 +41,14 @@ surveyIdToString (SurveyId id) =
 type Rating
     = Rating Int
 
+
 intToRating : Int -> Maybe Rating
 intToRating n =
     if n >= 1 && n <= 5 then
         Just (Rating n)
     else
         Nothing
+
 
 ratingToInt : Rating -> Int
 ratingToInt (Rating number) =
@@ -57,7 +59,6 @@ type alias Response a =
     { respondentId : Int
     , response : Maybe a
     }
-
 
 
 {-| This is an extensible type representing a survey question; it's extensible

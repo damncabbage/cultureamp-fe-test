@@ -78,20 +78,19 @@ questionResponsesDecoder =
     let
         validRatingResponses =
             Decode.list ratingResponseDecoder
-                |> Decode.map Maybe.values 
+                |> Decode.map Maybe.values
     in
+        Decode.field "question_type" Decode.string
+            |> Decode.andThen
+                (\questionType ->
+                    case questionType of
+                        "ratingquestion" ->
+                            decode RatingQuestion
+                                |> required "survey_responses" validRatingResponses
 
-    Decode.field "question_type" Decode.string
-        |> Decode.andThen
-            (\questionType ->
-                case questionType of
-                    "ratingquestion" ->
-                        decode RatingQuestion
-                            |> required "survey_responses" validRatingResponses
-
-                    _ ->
-                        Decode.fail ("Unknown question type: " ++ questionType)
-            )
+                        _ ->
+                            Decode.fail ("Unknown question type: " ++ questionType)
+                )
 
 
 ratingResponseDecoder : Decoder (Maybe (Response Rating))
@@ -99,8 +98,8 @@ ratingResponseDecoder =
     let
         makeResponse id resultResponse =
             resultResponse
-            |> Result.toMaybe
-            |> Maybe.map (\res -> { respondentId = id, response = res })
+                |> Result.toMaybe
+                |> Maybe.map (\res -> { respondentId = id, response = res })
 
         ratingDecoder =
             Decode.string
@@ -112,11 +111,11 @@ ratingResponseDecoder =
                             case String.toInt str of
                                 Ok num ->
                                     (intToRating num)
-                                    |> Maybe.unpack
-                                        (\x ->
-                                            Debug.log ("Rating outside range: " ++ str) (Err x)
-                                        )
-                                        (Ok << Just)
+                                        |> Maybe.unpack
+                                            (\x ->
+                                                Debug.log ("Rating outside range: " ++ str) (Err x)
+                                            )
+                                            (Ok << Just)
                                         |> Decode.succeed
 
                                 Err _ ->

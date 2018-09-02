@@ -42,7 +42,7 @@ encodeIndex list =
     Encode.object
         [ ( "survey_results"
           , Encode.list
-            (List.map (\( _, summ ) -> encodeSummary summ) list)
+                (List.map (\( _, summ ) -> encodeSummary summ) list)
           )
         ]
 
@@ -54,17 +54,17 @@ encodeSummary summary =
         , ( "url", Encode.string <| Data.Url.toString summary.url )
         , ( "participant_count", Encode.int <| summary.participantTotalCount )
         , ( "submitted_response_count", Encode.int <| summary.participantResponseCount )
-        , ( "response_rate", Encode.float <| summary.participantResponseRate / 100.0)
+        , ( "response_rate", Encode.float <| summary.participantResponseRate / 100.0 )
         ]
 
 
 genIndex : Fuzzer Survey.Index
 genIndex =
     genSurveyId
-    |> Fuzz.andThen
-        (\id ->
-            list (Fuzz.map (\summ -> ( id, summ )) (genSummary id))
-        )
+        |> Fuzz.andThen
+            (\id ->
+                list (Fuzz.map (\summ -> ( id, summ )) (genSummary id))
+            )
 
 
 genSummary : SurveyId -> Fuzzer Survey.Summary
@@ -77,6 +77,7 @@ genSummary id =
         |> Fuzz.andMap (positive int)
         |> Fuzz.andMap (positive int)
         |> Fuzz.andMap (floatRange 0.0 100.0)
+
 
 genSurveyId : Fuzzer SurveyId
 genSurveyId =

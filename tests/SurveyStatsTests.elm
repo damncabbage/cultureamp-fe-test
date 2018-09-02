@@ -9,7 +9,7 @@ import Data.Survey.Stats as Survey
 uniqueRatings : Test
 uniqueRatings =
     let
-        data = 
+        data =
             [ { respondentId = 1, response = Just (Rating 1) }
             , { respondentId = 2, response = Just (Rating 3) }
             , { respondentId = 3, response = Just (Rating 5) }
@@ -28,9 +28,10 @@ uniqueRatings =
                         |> Expect.equal (List.map .response data)
             , test "with duplicates" <|
                 \() ->
-                    Survey.uniqueRatings (List.concat [data, data])
+                    Survey.uniqueRatings (List.concat [ data, data ])
                         |> Expect.equal (List.map .response data)
             ]
+
 
 average : Test
 average =

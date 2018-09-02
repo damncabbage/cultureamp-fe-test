@@ -73,7 +73,6 @@ initLoad model baseUrl id =
             )
 
 
-
 view : (Msg -> RootMsg) -> SurveyId -> Model -> Html RootMsg
 view lift id model =
     let
@@ -81,12 +80,12 @@ view lift id model =
             EDict.get id model
                 |> Maybe.map (viewSurvey lift id)
                 |> Maybe.withDefault
-                    ( [], [Common.viewNotFoundError] )
+                    ( [], [ Common.viewNotFoundError ] )
     in
         div []
             [ div
                 [ Common.class .horizontalBar ]
-                ( List.concat
+                (List.concat
                     [ [ Common.viewBack ]
                     , header
                     ]
@@ -99,13 +98,13 @@ viewSurvey : (Msg -> RootMsg) -> SurveyId -> WebData SurveyForUI -> ( List (Html
 viewSurvey lift id loadingState =
     case loadingState of
         NotAsked ->
-            ( [], [Common.viewLoading] )
+            ( [], [ Common.viewLoading ] )
 
         Loading ->
-            ( [], [Common.viewLoading] )
+            ( [], [ Common.viewLoading ] )
 
         Failure e ->
-            ( [], [viewError lift id e] )
+            ( [], [ viewError lift id e ] )
 
         Success a ->
             viewLoadedSurvey id a
@@ -135,11 +134,11 @@ viewLoadingError id =
 viewLoadedSurvey : SurveyId -> SurveyForUI -> ( List (Html a), List (Html a) )
 viewLoadedSurvey id survey =
     ( [ header
-        [ Common.class .paddedContentColumn ]
-        [ h1
-            [ Common.class .bannerHeading ]
-            [ text survey.summary.name ]
-        ]
+            [ Common.class .paddedContentColumn ]
+            [ h1
+                [ Common.class .bannerHeading ]
+                [ text survey.summary.name ]
+            ]
       ]
     , Nonempty.toList survey.themes
         |> List.map (viewTheme id)
@@ -153,8 +152,8 @@ viewTheme id theme =
             [ class .stickyBar ]
             [ div
                 [ Common.classList
-                    [ (.paddedContentColumn, True)
-                    , (.navContainer, True)
+                    [ ( .paddedContentColumn, True )
+                    , ( .navContainer, True )
                     ]
                 ]
                 [ h2
@@ -164,7 +163,7 @@ viewTheme id theme =
             ]
         , ol
             [ class .questionsList ]
-            ( Nonempty.toList theme.questions
+            (Nonempty.toList theme.questions
                 |> List.map viewQuestion
             )
         ]
@@ -188,15 +187,17 @@ viewRatingsSummary responses =
     let
         uniqueRatings =
             Survey.uniqueRatings responses
+
         averageRating =
             Survey.average uniqueRatings
+
         responseRate =
             List.filter Maybe.isJust uniqueRatings
-            |> List.length
-            |> (\respCount ->
-                    ((toFloat respCount) * 100.0)
-                    / (toFloat (List.length uniqueRatings))
-                )
+                |> List.length
+                |> (\respCount ->
+                        ((toFloat respCount) * 100.0)
+                            / (toFloat (List.length uniqueRatings))
+                   )
     in
         dl [ class .questionSummary ]
             [ dt [] [ text "Average:" ]

@@ -23,16 +23,17 @@ changeLocationLink route attrs children =
 viewBack : Html RootMsg
 viewBack =
     nav
-      [ classList
-          [ (.paddedContentColumn, True)
-          , (.navContainer, True)
-          ]
-      ]
-      [ changeLocationLink
-          IndexRoute
-          [ class .navLink ]
-          [ text "Back to Surveys" ]
-      ]
+        [ classList
+            [ ( .paddedContentColumn, True )
+            , ( .navContainer, True )
+            ]
+        ]
+        [ changeLocationLink
+            IndexRoute
+            [ class .navLink ]
+            [ text "Back to Surveys" ]
+        ]
+
 
 viewLoading : Html a
 viewLoading =
@@ -41,6 +42,7 @@ viewLoading =
         [ spinner
         , p [] [ text "Loading..." ]
         ]
+
 
 viewNotFoundError : Html RootMsg
 viewNotFoundError =
@@ -75,8 +77,7 @@ classify upperRed upperYellow value =
     class <|
         if value <= upperRed then
             .trafficRed
+        else if value <= upperYellow then
+            .trafficYellow
         else
-            if value <= upperYellow then
-                .trafficYellow
-            else
-                .trafficGreen
+            .trafficGreen

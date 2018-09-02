@@ -10,7 +10,7 @@ import Api.Url as Api
 idFromSurveyUrl : Test
 idFromSurveyUrl =
     let
-        data = 
+        data =
             [ ( "/survey_results/1", Just (SurveyId 1) )
             , ( "/survey_results/1.json", Just (SurveyId 1) )
             , ( "/survey_results/234.json", Just (SurveyId 234) )
@@ -27,4 +27,4 @@ idFromSurveyUrl =
                             Api.idFromSurveyUrl (Url url)
                         )
                     |> Expect.equal
-                        (List.map (\( _, r) -> r) data)
+                        (List.map (\( _, r ) -> r) data)
