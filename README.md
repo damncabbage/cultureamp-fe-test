@@ -114,4 +114,10 @@ Some rougher notes on design decisions, to-do items, and problems I ran into tha
   * There are no UI functionality tests, which can go pear-shaped even if your types line up; I had a "compiling but not working" UI when hooking up the API-loading functions the first time around.
 
 * Documentation
-  * There is way less documentation in this that I'd like. I've tried to make the types as self-documenting as I can manage (eg. encoding assumptions, having transforms like `SurveyFromApi -> SurveyForUI`), but I haven't at all had the time to give this the comments (outside these notes) that I'd like.
+  * There is way less documentation in this that I'd like. I've tried to make the types as self-documenting as I can manage (eg. encoding assumptions, having transforms like `SurveyFromApi -> SurveyForUI`), but I haven't at all had the time to give this the comments (outside these notes) that I'd prefer.
+
+* Design
+  * This is a look at what I was initially shooting for with the design: https://i.imgur.com/DtnNPVl.jpg  
+    I didn't get to implement:  
+    * The stacked horizontal bar chart per question, or
+    * The more detailed rating-result breakdown panel.
